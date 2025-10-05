@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gevbook</title>
+    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-left">
+                <img src="../img/logo.png" alt="" class="logo">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Поиск на Facebook" data-lang-key="searchPlaceholder">
+                </div>
+            </div>
+            <div class="header-center">
+                <i class="fas fa-home active"></i>
+                <i class="fas fa-video"></i>
+                <i class="fas fa-store"></i>
+                <i class="fas fa-users"></i>
+                <a href="../games-hub/index.html"><i class="fas fa-gamepad"></i></a>
+            </div>
+            <div class="header-right">
+                <div class="profile-icon">
+                    <div class="avatar-icon-placeholder"><i class="fas fa-user"></i></div>
+                    <span data-lang-key="myProfileName">user</span>
+                </div>
+                <i class="fas fa-th-large"></i>
+                <i class="fab fa-facebook-messenger"></i>
+                <i class="fas fa-bell"></i>
+                <i class="fas fa-caret-down"></i>
+
+                <select id="language-switcher" class="language-switcher">
+                    <option value="ru">Русский</option>
+                    <option value="en">English</option>
+                    <option value="hy">Հայերեն</option>
+                </select>
+            </div>
+        </header>
+
+        <main class="main-content-wrapper">
+            <aside class="left-sidebar">
+                <div class="profile-link">
+                    <div class="avatar-icon-placeholder-sm"><i class="fas fa-user"></i></div>
+                    <span data-lang-key="myProfileName">Gevorg Shahinyan</span>
+                </div>
+                <ul class="sidebar-menu">
+                    <li><a href="#"><i class="fas fa-user-friends"></i> <span data-lang-key="friends">Друзья</span></a></li>
+                    <li><a href="#"><i class="fas fa-clock"></i> <span data-lang-key="memories">Воспоминания</span></a></li>
+                    <li><a href="#"><i class="fas fa-bookmark"></i> <span data-lang-key="saved">Сохраненное</span></a></li>
+                    <li><a href="#"><i class="fas fa-users"></i> <span data-lang-key="groups">Группы</span></a></li>
+                    <li><a href="#"><i class="fas fa-play-circle"></i> <span data-lang-key="reels">Видео Reels</span></a></li>
+                    <li><a href="#"><i class="fas fa-store"></i> <span data-lang-key="marketplace">Marketplace</span></a></li>
+                    <li><a href="#"><i class="fas fa-calendar-alt"></i> <span data-lang-key="events">Мероприятия</span></a></li>
+                    <li><a href="#"><i class="fas fa-chevron-down"></i> <span data-lang-key="showMore">Показать больше</span></a></li>
+                </ul>
+                <div class="sidebar-section-title" data-lang-key="yourQuickLinks">Ваши быстрые ссылки</div>
+                <ul class="sidebar-menu">
+                    <li><a href="#"><i class="fas fa-gamepad"></i> FarmVille 2</a></li>
+                </ul>
+            </aside>
+
+            <section class="feed-container">
+                <div class="create-post">
+                    <div class="post-header">
+                        <div class="avatar-icon-placeholder"><i class="fas fa-user"></i></div>
+                        <input type="text" id="postInput" placeholder="Что у вас нового, Gevorik?" data-lang-key="whatsNewPlaceholder">
+                    </div>
+                    <div id="imagePreviewContainer" class="image-preview-container"></div>
+                    <div class="post-options">
+                        <label for="imageUpload" class="post-option-button">
+                            <i class="fas fa-image" style="color: #45bd62;"></i> <span data-lang-key="photoVideo">Фото/видео</span>
+                            <input type="file" id="imageUpload" accept="image/*,video/*" multiple style="display: none;">
+                        </label>
+                        <button><i class="fas fa-video" style="color: #f02849;"></i> <span data-lang-key="liveVideo">Прямой эфир</span></button>
+                        <button><i class="fas fa-grin-alt" style="color: #f7b928;"></i> <span data-lang-key="feelingActivity">Чувства/действия</span></button>
+                    </div>
+                    <button class="post-button" id="publishPostButton" data-lang-key="publish">Опубликовать</button>
+                </div>
+
+                <div class="feed-post" data-post-id="static-post-1">
+                    <div class="post-author-info">
+                        <div class="avatar-icon-placeholder"><i class="fas fa-user"></i></div>
+                        <div>
+                            <span class="author-name">Jemma Ayvazyan</span>
+                            <span class="post-time" data-timestamp="1688140800000">2 лет назад</span>
+                        </div>
+                    </div>
+                    <p class="post-text">Мои золотые, напекла я вкусных блинов, оцените пожалуйста😍</p>
+                    <div class="post-images">
+                        <img src="./img/big_456172.jpg" alt="Post Image 1">
+                    </div>
+                    <div class="post-actions">
+                        <span class="like-button" data-likes="25"><i class="fas fa-thumbs-up"></i> <span data-lang-key="like">Нравится</span> <span class="like-count">25</span></span>
+                        <span class="comment-button">
+                            <i class="fas fa-comment"></i>
+                            <span data-lang-key="comment">Комментировать</span>
+                            <span class="comment-count">2</span>
+                        </span>
+                        <span class="share-button"><i class="fas fa-share"></i> <span data-lang-key="share">Поделиться</span></span>
+                    </div>
+                    <div class="comments-section">
+                        <div class="comment-input-area">
+                            <div class="avatar-icon-placeholder-sm"><i class="fas fa-user"></i></div>
+                            <input type="text" class="comment-input" placeholder="Напишите комментарий..." data-lang-key="writeAComment">
+                        </div>
+                        <div class="comments-list">
+                            <div class="comment-item" data-comment-id="static-comment-1-1" data-author-id="David Melikbekyan">
+                                <div class="avatar-icon-placeholder-sm"><i class="fas fa-user"></i></div>
+                                <div class="comment-content">
+                                    <span class="comment-author">David Melikbekyan</span>
+                                    <p class="comment-text">Ммм, очень аппетитно! Выглядит вкусно.</p>
+                                    <div class="comment-meta">
+                                        <span class="comment-time" data-timestamp="1678886400000"></span>
+                                        <button class="delete-comment-btn" style="display:none;" data-lang-key="deleteComment">Удалить</button>
+                                    </div>
+                                </div>
+                            </div>
+                           <div class="comment-item" data-comment-id="static-comment-1-2" data-author-id="Lilit Karapetyan">
+                                <div class="avatar-icon-placeholder-sm"><i class="fas fa-user"></i></div>
+                                <div class="comment-content">
+                                    <span class="comment-author">Lilit Karapetyan</span>
+                                    <p class="comment-text">Поделитесь рецептом!</p>
+                                    <div class="comment-meta">
+                                        <span class="comment-time" data-timestamp="1678972800000"></span>
+                                        <button class="delete-comment-btn" style="display:none;" data-lang-key="deleteComment">Удалить</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="feed-post" data-post-id="static-post-2">
+                    <div class="post-author-info">
+                        <div class="avatar-icon-placeholder"><i class="fas fa-user"></i></div>
+                        <div>
+                            <span class="author-name">Juli Shahinyan</span>
+                            <span class="post-time" data-timestamp="1717977600000">5 недель назад</span>
+                        </div>
+                    </div>
+                    <p class="post-text">смотрите как круто эти детки танцуют🤣😂👌</p>
+                    <div class="post-images single-image"> <video controls preload="metadata" width="100%" height="auto">
+                                <source src="./img/oQImDfAzeAI0GoZjQGjOKaCEpIDoLITezUBEqB.mp4" type="video/mp4">
+                                Ваш браузер не поддерживает тег video.
+                            </video>
+                    </div>
+                    <div class="post-actions">
+                        <span class="like-button" data-likes="10"><i class="fas fa-thumbs-up"></i> <span data-lang-key="like">Нравится</span> <span class="like-count">10</span></span>
+                        <span class="comment-button">
+                            <i class="fas fa-comment"></i>
+                            <span data-lang-key="comment">Комментировать</span>
+                            <span class="comment-count">1</span>
+                        </span>
+                        <span class="share-button"><i class="fas fa-share"></i> <span data-lang-key="share">Поделиться</span></span>
+                    </div>
+                    <div class="comments-section">
+                        <div class="comment-input-area">
+                            <div class="avatar-icon-placeholder-sm"><i class="fas fa-user"></i></div>
+                            <input type="text" class="comment-input" placeholder="Напишите комментарий..." data-lang-key="writeAComment">
+                        </div>
+                        <div class="comments-list">
+                            <div class="comment-item" data-comment-id="static-comment-2-1" data-author-id="Someone Else">
+                                <div class="avatar-icon-placeholder-sm"><i class="fas fa-user"></i></div>
+                                <div class="comment-content">
+                                    <span class="comment-author">Someone Else</span>
+                                    <p class="comment-text">Очень мило!</p>
+                                    <div class="comment-meta">
+                                        <span class="comment-time" data-timestamp="1680268800000"></span>
+                                        <button class="delete-comment-btn" style="display:none;" data-lang-key="deleteComment">Удалить</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <aside class="right-sidebar">
+                <div class="sidebar-section-title" data-lang-key="ads">Реклама</div>
+                <div class="ad-block">
+                    <p data-lang-key="ad1Text">закажи через озон и садись на бизон</p>
+                </div>
+                <div class="ad-block">
+                    <p data-lang-key="ad2Text">Atmos самое говно среди говна</p>
+                </div>
+
+                <div class="sidebar-section-title" data-lang-key="contacts">Контакты</div>
+                <ul class="contact-list">
+                    <li>
+                        <div class="avatar-icon-placeholder-sm"><i class="fas fa-user"></i></div>
+                        <span>Qnarik Shahgeldyan</span>
+                    </li>
+                    <li>
+                        <div class="avatar-icon-placeholder-sm"><i class="fas fa-user"></i></div>
+                        <span>Lilit Karapetyan</span>
+                    </li>
+                    <li>
+                        <div class="avatar-icon-placeholder-sm"><i class="fas fa-user"></i></div>
+                        <span>Джули Шагинян</span>
+                    </li>
+                </ul>
+
+                <div class="sidebar-section-title" data-lang-key="groupChats">Групповые чаты</div>
+                <button class="create-group-chat"><i class="fas fa-plus"></i> <span data-lang-key="createGroupChat">Создать групповой чат</span></button>
+            </aside>
+        </main>
+    </div>
+    <script src="script1.js"></script>
+</body>
+</html>
