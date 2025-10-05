@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gevbook Register Menu</title>
+    <link rel="stylesheet" href="style.css"> </head>
+<body>
+
+<div class="language-switcher">
+        <select id="languageSelect">
+            <option value="ru">Русский</option>
+            <option value="en">English</option>
+        </select>
+    </div>
+
+    <div class="main-container">
+        <div class="left-section">
+            <img src="./img/Gevbook.png" alt="">
+            <p class="tagline" data-key="tagline">Gevbook помогает вам всегда оставаться на связи и общаться со своими знакомыми.</p>
+        </div>
+
+        <div class="right-section">
+            <div class="login-card">
+                <input type="text" placeholder="Электронный адрес или номер телефона" data-key="emailOrPhonePlaceholder">
+                <input type="password" placeholder="Пароль" data-key="passwordPlaceholder">
+                <button class="login-button" data-key="loginButton">Вход</button>
+                <a href="#" class="forgot-password" data-key="forgotPasswordLink">Забыли пароль?</a>
+                <hr class="divider">
+                <button class="create-account-button" id="openRegistrationModal" data-key="createAccountButton">Создать новый аккаунт</button>
+            </div>
+            <p class="create-page-text" data-key="createPageText">
+                <a href="#" class="create-page-link"  data-key="createPageLink">Создать Страницу</a> знаменитости, музыкальной группы или компании.
+            </p>
+        </div>
+    </div>
+
+    <div id="registrationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-button" id="closeRegistrationModal">&times;</span>
+                <h3 data-key="modalTitle">Создать новый аккаунт</h3>
+                <p data-key="modalSubtitle">Быстро и легко.</p>
+            </div>
+            <hr class="modal-divider">
+            <form class="registration-form">
+                <div class="name-inputs">
+                    <input type="text" placeholder="Имя" required data-key="firstNamePlaceholder">
+                    <input type="text" placeholder="Фамилия" required class="surname" data-key="lastNamePlaceholder">
+                </div>
+                <input type="text" placeholder="Номер мобильного телефона или эл. адрес" data-key="emailOrPhonePlaceholder" required>
+                <input type="password" placeholder="Новый пароль"  data-key="newPasswordPlaceholder" required>
+
+                <label for="dob-day" class="input-label" data-key="dobLabel">Дата рождения</label>
+                <div class="dob-selectors">
+                    <select id="dob-day" name="day"></select>
+                    <select id="dob-month" name="month"></select>
+                    <select id="dob-year" name="year"></select>
+                </div>
+                <a href="#" class="info-icon">?</a> <label class="input-label" data-key="genderLabel" >Пол</label>
+                <div class="gender-options">
+                    <label class="gender-radio-label">
+                        <input type="radio" name="gender" value="female">  <span data-key="femaleGenderOption">Женщина</span>
+                    </label>
+                    <label class="gender-radio-label">
+                        <input type="radio" name="gender" value="male" > <span data-key="maleGenderOption">Мужчина</span>
+                    </label>
+                    <label class="gender-radio-label" >
+                        <input type="radio" name="gender" value="custom" class="other"> <span data-key="customGenderOption">Другой вариант</span>
+                    </label>
+                </div>
+                <a href="#" class="info-icon">?</a> <p class="terms-text">
+                    Нажимая кнопку «Зарегистрироваться», вы принимаете наши
+                    <a href="#" data-key="termsLink">Условия</a>, <a href="#"data-key="privacyPolicyLink" >Политику конфиденциальности</a> и <a href="#" data-key="cookiesPolicyLink">Политику в отношении файлов cookie</a>.
+                    Вы можете получать SMS-уведомления от нас, отказаться от которых можно в любой момент.
+                </p>
+
+                <button type="submit" class="register-button" data-key="registerButton">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>  
+
+    <script src="script.js"></script> </body>
+</html>

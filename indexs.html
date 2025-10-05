@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Load</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            overflow: hidden;
+        }
+        .facebook-logo {
+            width: 80px;
+            height: 80px;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <img src="./img/logo.png" alt="Gevbook Logo" class="Gevbook-logo">
+
+    <script>
+        const redirectDelay = 3000;
+
+        setTimeout(() => {
+            window.location.href = './main/index1.html';
+        }, redirectDelay);
+    </script>
+
+</body>
+</html>
