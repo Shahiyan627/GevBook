@@ -1,0 +1,176 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    text-transform: capitalize;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    transition: all .2s linear;
+    font-family: 'Nunito', sans-serif;
+}
+
+body {
+    background-color: #f0f2f5;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+    animation-duration: 0.1s;
+}
+
+.header {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+    padding: 8px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    border-bottom: 1px solid #dddfe2;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-left .logo {
+    width: 60px;
+    height: 50px;
+    margin-right: 8px;
+}
+
+.header-left h1 {
+    font-size: 1.3em;
+    color: #1c1e21;
+    font-weight: 700;
+    margin: 0;
+}
+
+.games-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 80px;
+    padding-bottom: 20px;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+}
+
+.dino-game-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+    padding: 20px;
+    text-align: center;
+    width: 640px;
+    position: relative;
+    margin-top: 20px;
+}
+
+#dinoGameCanvas {
+    display: block;
+    margin: 15px auto;
+    background-color: #f7f7f7;
+    border: 1px solid #dddfe2;
+    border-radius: 4px;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+}
+
+#scoreDisplay {
+    font-family: 'Courier New', monospace;
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #65676b;
+    margin-bottom: 15px;
+    text-align: right;
+    padding-right: 10px;
+}
+
+#gameOverMessage, #pauseMessage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 20px 30px;
+    border: 1px solid #dddfe2;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+    z-index: 50;
+    text-align: center;
+    width: calc(100% - 40px);
+    max-width: 400px;
+}
+
+#gameOverMessage p:first-child, #pauseMessage p:first-child {
+    font-size: 2.2em;
+    font-weight: 900;
+    color: #1c1e21;
+    margin: 0 0 10px 0;
+    text-transform: uppercase;
+}
+
+.message-sub {
+    font-size: 0.9em;
+    color: #65676b;
+    margin: 0;
+}
+
+.game-controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.blue-button, .yellow-button, .grey-button {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 120px;
+}
+
+.blue-button {
+    color: white;
+    background-color: #166fe5;
+}
+.blue-button:hover {
+    background-color: #166fe5;
+    box-shadow: 0.2rem 0.2rem gray;
+}
+
+.yellow-button {
+        background-color: #166fe5;
+    color: white;
+}
+.yellow-button:hover {
+    background-color: #ffd84d;
+}
+
+.grey-button {
+    background-color: #e4e6eb;
+    color: #1c1e21;
+}
+.grey-button:hover {
+    background-color: #dddfe2;
+}
+
+.blue-button:active, .yellow-button:active, .grey-button:active {
+    transform: translateY(1px);
+}
