@@ -1,7 +1,3 @@
-/* game-hub/style.css */
-
-/* --- Общий дизайн Хаба --- */
-
 .game-hub-container {
     padding-top: 80px; 
     padding-bottom: 40px;
@@ -108,7 +104,6 @@
     cursor: default;
 }
 
-/* --- Красивый дизайн для смены языка --- */
 
 .language-switcher {
     margin-right: 10px;
@@ -124,7 +119,6 @@
 }
 
 #languageSelect {
-    /* Скрываем стандартный стиль селектора для чистого дизайна */
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -138,7 +132,6 @@
     cursor: pointer;
     line-height: 1.5;
     
-    /* Добавляем иконку стрелки вниз через background-image */
     background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2365676b%22%20d%3D%22M287%20197.35L146.2%2056.55%205.4%20197.35z%22%2F%3E%3C%2Fsvg%3E');
     background-repeat: no-repeat;
     background-position: right 8px top 50%;
