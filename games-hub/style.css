@@ -1,0 +1,158 @@
+/* game-hub/style.css */
+
+/* --- Общий дизайн Хаба --- */
+
+.game-hub-container {
+    padding-top: 80px; 
+    padding-bottom: 40px;
+    width: 90%;
+    max-width: 1000px; 
+    margin: 0 auto;
+}
+
+.section-title {
+    color: #1c1e21;
+    font-size: 1.8em;
+    font-weight: 700;
+    margin: 20px 0 15px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #dddfe2;
+}
+
+.game-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.game-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+
+.game-card:hover:not(.disabled) {
+    transform: translateY(-5px); 
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .15), 0 10px 20px rgba(0, 0, 0, .1);
+}
+
+.game-card.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(50%);
+}
+
+.game-image-placeholder {
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3.5em;
+    color: white;
+    font-weight: 900;
+    background: linear-gradient(135deg, rgba(24, 119, 242, 0.8), #1877f2); 
+}
+
+.dino-bg {
+    background-color: #1877f2; 
+}
+
+.future-bg {
+    background-color: #65676b; 
+}
+
+.game-info {
+    padding: 15px;
+}
+
+.game-info h3 {
+    font-size: 1.3em;
+    color: #1c1e21;
+    margin: 0 0 5px 0;
+}
+
+.game-description {
+    font-size: 0.95em;
+    color: #65676b;
+    margin-bottom: 15px;
+    min-height: 40px;
+}
+
+.launch-button {
+    display: block; 
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #1877f2;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    border: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+.launch-button:hover:not(.disabled-button) {
+    background-color: #166fe5;
+}
+
+.disabled-button {
+    background-color: #e4e6eb;
+    color: #65676b;
+    cursor: default;
+}
+
+/* --- Красивый дизайн для смены языка --- */
+
+.language-switcher {
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px; 
+}
+
+.language-switcher span {
+    font-size: 0.9em;
+    color: #65676b;
+    font-weight: 600; 
+}
+
+#languageSelect {
+    /* Скрываем стандартный стиль селектора для чистого дизайна */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    
+    background-color: #f0f2f5; 
+    color: #1c1e21;
+    padding: 6px 30px 6px 12px; 
+    border: 1px solid #dddfe2;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    line-height: 1.5;
+    
+    /* Добавляем иконку стрелки вниз через background-image */
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2365676b%22%20d%3D%22M287%20197.35L146.2%2056.55%205.4%20197.35z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 8px top 50%;
+    background-size: 10px auto;
+    
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+#languageSelect:hover {
+    background-color: #e4e6eb; 
+}
+
+#languageSelect:focus {
+    outline: none;
+    border-color: #1877f2; 
+    box-shadow: 0 0 0 1px #1877f2;
+}

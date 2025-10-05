@@ -1,0 +1,41 @@
+{
+    "ru": {
+        "pageTitle": "Gevbook - Игровой Центр",
+        "headerTitle": "Игровой Центр",
+        "sectionTitleArcade": "Аркадные Игры",
+        "dinoTitle": "Google Динозаврик (Offline Runner)",
+        "dinoDescription": "Классическая аркада. Прыгайте через кактусы, чтобы побить рекорд!",
+        "dinoButton": "Играть",
+        "futureTitle": "T-Rex Jump 2.0",
+        "futureDescription": "Обновленная версия Динозаврика с новыми уровнями и достижениями.",
+        "futureButton": "Скоро",
+        "homeTooltip": "Домой",
+        "language": "Язык"
+    },
+    "en": {
+        "pageTitle": "Gevbook - Game Hub",
+        "headerTitle": "Game Hub",
+        "sectionTitleArcade": "Arcade Games",
+        "dinoTitle": "Google Dino Runner (Offline Runner)",
+        "dinoDescription": "A classic arcade game. Jump over cacti to beat your high score!",
+        "dinoButton": "Play",
+        "futureTitle": "T-Rex Jump 2.0",
+        "futureDescription": "An updated version of the Dino Runner with new levels and achievements.",
+        "futureButton": "Coming Soon",
+        "homeTooltip": "Home",
+        "language": "Language"
+    },
+    "am": {
+        "pageTitle": "Gevbook - Խաղերի Կենտրոն",
+        "headerTitle": "Խաղերի Կենտրոն",
+        "sectionTitleArcade": "Արկադային Խաղեր",
+        "dinoTitle": "Google Դինոզավրիկ (Offline Runner)",
+        "dinoDescription": "Դասական արկադա: Ցատկեք կակտուսների վրայով՝ ռեկորդ սահմանելու համար:",
+        "dinoButton": "Խաղալ",
+        "futureTitle": "T-Rex Jump 2.0",
+        "futureDescription": "Դինոզավրիկի թարմացված տարբերակ՝ նոր մակարդակներով և ձեռքբերումներով:",
+        "futureButton": "Շուտով",
+        "homeTooltip": "Գլխավոր",
+        "language": "Լեզու"
+    }
+}

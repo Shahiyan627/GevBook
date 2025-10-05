@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-key="pageTitle">Gevbook - Игровой Центр</title>
+    <link rel="stylesheet" href="../main/style1.css"> 
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container"> 
+        <header class="header">
+            <div class="header-left">
+                <a href="../main/index1.html">
+                    <img src="../img/logo.png" alt="Gevbook Logo" class="logo">
+                </a>
+                <h1 style="margin-left: 10px; font-size: 1.5em; color: #1c1e21; font-weight: 700;" data-key="headerTitle">Игровой Центр</h1>
+            </div>
+            <div class="header-right">
+                <div class="language-switcher">
+                    <span data-key="language">Язык</span>
+                    <select id="languageSelect"> 
+                        <option value="ru">Русский</option>
+                        <option value="en">English</option>
+                        <option value="am">Հայերեն</option>
+                    </select>
+                </div>
+                <a href="../main/index1.html" class="home-icon-link" title="Домой" data-key="homeTooltip">
+                    <i class="fas fa-home fa-lg" style="color: #1877f2;"></i>
+                </a>
+            </div>
+        </header>
+
+        <main class="main-content game-hub-container">
+            <h2 class="section-title" data-key="sectionTitleArcade">Аркадные Игры</h2>
+            
+            <div class="game-cards-grid">
+                
+                <div class="game-card">
+                    <div class="game-image-placeholder dino-bg">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <div class="game-info">
+                        <h3 data-key="dinoTitle">Google Динозаврик (Offline Runner)</h3>
+                        <p class="game-description" data-key="dinoDescription">Классическая аркада. Прыгайте через кактусы, чтобы побить рекорд!</p>
+                        <a href="../games/dino-game.html" class="launch-button" data-key="dinoButton">Играть</a>
+                    </div>
+                </div>
+                
+                <div class="game-card disabled">
+                    <div class="game-image-placeholder future-bg">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="game-info">
+                        <h3 data-key="futureTitle">T-Rex Jump 2.0</h3>
+                        <p class="game-description" data-key="futureDescription">Обновленная версия Динозаврика с новыми уровнями и достижениями.</p>
+                        <button class="launch-button disabled-button" disabled data-key="futureButton">Скоро</button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
