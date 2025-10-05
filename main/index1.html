@@ -15,7 +15,7 @@
                 <img src="../img/logo.png" alt="" class="logo">
                 <div class="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Поиск на Facebook" data-lang-key="searchPlaceholder">
+                    <input type="text" placeholder="Поиск на Gevbook" data-lang-key="searchPlaceholder">
                 </div>
             </div>
             <div class="header-center">
@@ -28,7 +28,7 @@
             <div class="header-right">
                 <div class="profile-icon">
                     <div class="avatar-icon-placeholder"><i class="fas fa-user"></i></div>
-                    <span data-lang-key="myProfileName">user</span>
+                    <span data-lang-key="myProfileName">Gevorg Shahinyan</span>
                 </div>
                 <i class="fas fa-th-large"></i>
                 <i class="fab fa-facebook-messenger"></i>
@@ -80,8 +80,10 @@
                         <button><i class="fas fa-video" style="color: #f02849;"></i> <span data-lang-key="liveVideo">Прямой эфир</span></button>
                         <button><i class="fas fa-grin-alt" style="color: #f7b928;"></i> <span data-lang-key="feelingActivity">Чувства/действия</span></button>
                     </div>
-                    <button class="post-button" id="publishPostButton" data-lang-key="publish">Опубликовать</button>
+                    <button class="post-button" id="publishButton" data-lang-key="publish">Опубликовать</button>
                 </div>
+                
+                <div id="posts-container"></div> 
 
                 <div class="feed-post" data-post-id="static-post-1">
                     <div class="post-author-info">
@@ -90,7 +92,7 @@
                             <span class="author-name">Jemma Ayvazyan</span>
                             <span class="post-time" data-timestamp="1688140800000">2 лет назад</span>
                         </div>
-                    </div>
+                        <i class="fas fa-ellipsis-h post-options-icon" data-action="delete-post"></i> </div>
                     <p class="post-text">Мои золотые, напекла я вкусных блинов, оцените пожалуйста😍</p>
                     <div class="post-images">
                         <img src="./img/big_456172.jpg" alt="Post Image 1">
@@ -117,7 +119,7 @@
                                     <p class="comment-text">Ммм, очень аппетитно! Выглядит вкусно.</p>
                                     <div class="comment-meta">
                                         <span class="comment-time" data-timestamp="1678886400000"></span>
-                                        <button class="delete-comment-btn" style="display:none;" data-lang-key="deleteComment">Удалить</button>
+                                        <button class="delete-comment-btn" data-action="delete-comment" style="display:none;" data-lang-key="deleteComment">Удалить</button>
                                     </div>
                                 </div>
                             </div>
@@ -128,7 +130,7 @@
                                     <p class="comment-text">Поделитесь рецептом!</p>
                                     <div class="comment-meta">
                                         <span class="comment-time" data-timestamp="1678972800000"></span>
-                                        <button class="delete-comment-btn" style="display:none;" data-lang-key="deleteComment">Удалить</button>
+                                        <button class="delete-comment-btn" data-action="delete-comment" style="display:none;" data-lang-key="deleteComment">Удалить</button>
                                     </div>
                                 </div>
                             </div>
@@ -143,7 +145,7 @@
                             <span class="author-name">Juli Shahinyan</span>
                             <span class="post-time" data-timestamp="1717977600000">5 недель назад</span>
                         </div>
-                    </div>
+                        <i class="fas fa-ellipsis-h post-options-icon" data-action="delete-post"></i> </div>
                     <p class="post-text">смотрите как круто эти детки танцуют🤣😂👌</p>
                     <div class="post-images single-image"> <video controls preload="metadata" width="100%" height="auto">
                                 <source src="./img/oQImDfAzeAI0GoZjQGjOKaCEpIDoLITezUBEqB.mp4" type="video/mp4">
@@ -172,7 +174,7 @@
                                     <p class="comment-text">Очень мило!</p>
                                     <div class="comment-meta">
                                         <span class="comment-time" data-timestamp="1680268800000"></span>
-                                        <button class="delete-comment-btn" style="display:none;" data-lang-key="deleteComment">Удалить</button>
+                                        <button class="delete-comment-btn" data-action="delete-comment" style="display:none;" data-lang-key="deleteComment">Удалить</button>
                                     </div>
                                 </div>
                             </div>
@@ -212,6 +214,8 @@
             </aside>
         </main>
     </div>
+
+    
     <script src="script1.js"></script>
 </body>
 </html>

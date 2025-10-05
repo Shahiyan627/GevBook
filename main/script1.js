@@ -30,10 +30,8 @@ const translations = {
         hereWillBePhotos: "Здесь будут ваши фотографии",
         deleteComment: "Удалить",
         confirmDeleteComment: "Вы уверены, что хотите удалить этот комментарий?",
-        cannotDeleteOthersComment: "Вы можете удалять только свои комментарии.",
-        deletePost: "Удалить пост",
         confirmDeletePost: "Вы уверены, что хотите удалить этот пост?",
-        cancel: "Отмена"
+        reply: "Ответить"
     },
     en: {
         searchPlaceholder: "Search on Gevbook",
@@ -42,12 +40,12 @@ const translations = {
         memories: "Memories",
         saved: "Saved",
         groups: "Groups",
-        reels: "Video Reels",
+        reels: "Reels Videos",
         marketplace: "Marketplace",
         events: "Events",
         showMore: "Show More",
         yourQuickLinks: "Your Quick Links",
-        whatsNewPlaceholder: "What's on your mind, user?",
+        whatsNewPlaceholder: "What's new with you, User?",
         liveVideo: "Live Video",
         photoVideo: "Photo/Video",
         feelingActivity: "Feeling/Activity",
@@ -57,830 +55,440 @@ const translations = {
         comment: "Comment",
         writeAComment: "Write a comment...",
         share: "Share",
-        ads: "Sponsored",
-        ad1Text: "order through Ozon and ride a bison",
-        ad2Text: "Atmos is the worst of the worst",
+        ads: "Ads",
+        ad1Text: "order through ozone and ride a bison",
+        ad2Text: "Atmos is the worst among the worst",
         contacts: "Contacts",
-        groupChats: "Group conversations",
-        createGroupChat: "Create new group",
-        hereWillBePhotos: "Here will be your photos",
+        groupChats: "Group Chats",
+        createGroupChat: "Create Group Chat",
+        hereWillBePhotos: "Your photos will be here",
         deleteComment: "Delete",
         confirmDeleteComment: "Are you sure you want to delete this comment?",
-        cannotDeleteOthersComment: "You can only delete your own comments.",
-        deletePost: "Delete Post",
         confirmDeletePost: "Are you sure you want to delete this post?",
-        cancel: "Cancel"
+        reply: "Reply"
     },
-    hy: {
-        searchPlaceholder: "Որոնել Gevbook-ում",
-        myProfileName: "user",
+    am: {
+        searchPlaceholder: "Փնտրել Gevbook-ում",
+        myProfileName: "Օգտատեր",
         friends: "Ընկերներ",
         memories: "Հիշողություններ",
-        saved: "Պահվածներ",
+        saved: "Պահպանվածներ",
         groups: "Խմբեր",
-        reels: "Ռիլսեր",
+        reels: "Ռիլս Վիդեոներ",
         marketplace: "Շուկա",
         events: "Միջոցառումներ",
-        showMore: "Ավելին",
-        yourQuickLinks: "Ձեր արագ հղումները",
-        whatsNewPlaceholder: "Ի՞նչ կա նոր, user",
+        showMore: "Ավելին ցույց տալ",
+        yourQuickLinks: "Ձեր Արագ Հղումները",
+        whatsNewPlaceholder: "Ի՞նչ նորություն կա, օգտատեր:",
         liveVideo: "Ուղիղ եթեր",
         photoVideo: "Լուսանկար/տեսանյութ",
-        feelingActivity: "Զգացմունք/գործողություն",
+        feelingActivity: "Զգացմունքներ/Գործողություններ",
         publish: "Հրապարակել",
         like: "Հավանել",
         liked: "Հավանված է",
         comment: "Մեկնաբանել",
-        writeAComment: "Գրել մեկնաբանություն...",
+        writeAComment: "Գրեք մեկնաբանություն...",
         share: "Կիսվել",
-        ads: "Հովանավորվող",
-        ad1Text: "պատվիրել Ozon-ի միջոցով և նստել բիզոնի վրա",
+        ads: "Գովազդ",
+        ad1Text: "պատվիրեք օզոնի միջոցով և նստեք բիզոնի վրա",
         ad2Text: "Atmos-ը ամենավատն է վատերի մեջ",
         contacts: "Կոնտակտներ",
         groupChats: "Խմբակային զրույցներ",
         createGroupChat: "Ստեղծել խմբակային զրույց",
-        hereWillBePhotos: "Այստեղ կլինեն ձեր լուսանկարները",
+        hereWillBePhotos: "Ձեր լուսանկարները կլինեն այստեղ",
         deleteComment: "Ջնջել",
-        confirmDeleteComment: "Վստա՞հ եք, որ ցանկանում եք ջնջել այս մեկնաբանությունը։",
-        cannotDeleteOthersComment: "Դուք կարող եք ջնջել միայն ձեր մեկնաբանությունները։",
-        deletePost: "Ջնջել գրառումը",
-        confirmDeletePost: "Վստա՞հ եք, որ ցանկանում եք ջնջել այս գրառումը։",
-        cancel: "Չեղարկել"
+        confirmDeleteComment: "Համոզվա՞ծ եք, որ ցանկանում եք ջնջել այս մեկնաբանությունը?",
+        confirmDeletePost: "Համոզվա՞ծ եք, որ ցանկանում եք ջնջել այս գրառումը?",
+        reply: "Պատասխանել"
     }
 };
 
 let currentLang = localStorage.getItem('facebookLang') || 'ru';
-moment.locale(currentLang);
+let posts = []; 
+
+const DB_NAME = 'GevbookDB';
+const DB_VERSION = 1;
+const STORE_NAME = 'postsStore';
+let db;
+
+function openDB() {
+    return new Promise((resolve, reject) => {
+        if (!window.indexedDB) {
+            console.error("IndexedDB не поддерживается вашим браузером.");
+            reject("IndexedDB not supported");
+            return;
+        }
+        
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+        request.onupgradeneeded = (event) => {
+            db = event.target.result;
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+                db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+            }
+        };
+
+        request.onsuccess = (event) => {
+            db = event.target.result;
+            resolve(db);
+        };
+
+        request.onerror = (event) => {
+            console.error('IndexedDB error:', event.target.error);
+            reject(event.target.error);
+        };
+    });
+}
+
+async function savePostToDB(post) {
+    try {
+        const dbInstance = await openDB();
+        return new Promise((resolve, reject) => {
+            const transaction = dbInstance.transaction(STORE_NAME, 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.put(post); 
+
+            request.onsuccess = () => resolve();
+            request.onerror = (event) => reject(event.target.error);
+        });
+    } catch (error) {
+        console.error("Ошибка сохранения в IndexedDB:", error);
+    }
+}
+
+async function loadPostsFromDB() {
+    try {
+        const dbInstance = await openDB();
+        return new Promise((resolve, reject) => {
+            const transaction = dbInstance.transaction(STORE_NAME, 'readonly');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.getAll(); 
+
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = (event) => reject(event.target.error);
+        });
+    } catch (error) {
+        console.error("Ошибка загрузки из IndexedDB:", error);
+        return [];
+    }
+}
+
+const postsContainer = document.getElementById('posts-container');
+const postInput = document.getElementById('postInput'); 
+const imageUpload = document.getElementById('imageUpload');
+const imagePreviewContainer = document.getElementById('imagePreviewContainer'); 
+
 
 function applyTranslations(lang) {
-    moment.locale(lang);
-
     document.querySelectorAll('[data-lang-key]').forEach(element => {
         const key = element.getAttribute('data-lang-key');
         if (translations[lang] && translations[lang][key]) {
             if (element.tagName === 'INPUT' && element.hasAttribute('placeholder')) {
                 element.placeholder = translations[lang][key];
             } else {
-                if (element.classList.contains('like-button') || element.classList.contains('comment-button') ||
-                    element.classList.contains('share-button') || element.classList.contains('post-option-button') ||
-                    element.classList.contains('post-button') || element.classList.contains('create-group-chat') ||
-                    element.classList.contains('delete-post-btn') || element.classList.contains('delete-comment-btn') ||
-                    element.classList.contains('cancel-btn')) {
-                    const textNode = Array.from(element.childNodes).find(node => node.nodeType === Node.TEXT_NODE || (node.nodeType === Node.ELEMENT_NODE && node.tagName === 'SPAN' && !node.classList.contains('like-count') && !node.classList.contains('comment-count')));
-                    if (textNode) {
-                        if (textNode.tagName === 'SPAN') {
-                            textNode.textContent = translations[lang][key];
-                        } else {
-                            element.textContent = translations[lang][key];
-                        }
-                    } else if (element.tagName === 'BUTTON') {
-                        element.textContent = translations[lang][key];
-                    }
-                } else if (element.classList.contains('comment-count') || element.classList.contains('like-count')) {
-                    return;
-                } else if (element.tagName === 'SPAN' && element.closest('.profile-icon, .profile-link') && key === 'myProfileName') {
-                    element.textContent = translations[lang][key];
-                } else if (element.closest('.post-actions')) {
-                    if (element.classList.contains('like-button') && element.querySelector('span[data-lang-key]')) {
-                         element.querySelector('span[data-lang-key]').textContent = translations[lang][key];
-                    } else if (element.classList.contains('comment-button') && element.querySelector('span[data-lang-key]')) {
-                         element.querySelector('span[data-lang-key]').textContent = translations[lang][key];
-                    } else if (element.classList.contains('share-button') && element.querySelector('span[data-lang-key]')) {
-                         element.querySelector('span[data-lang-key]').textContent = translations[lang][key];
-                    }
-                    else if (element.tagName === 'P' && (key === 'ad1Text' || key === 'ad2Text')) {
-                        element.textContent = translations[lang][key];
-                    }
-                    else {
-                        element.textContent = translations[lang][key];
-                    }
-                } else if (element.tagName === 'P' && (key === 'ad1Text' || key === 'ad2Text')) {
-                    element.textContent = translations[lang][key];
-                } else {
-                    element.textContent = translations[lang][key];
-                }
+                element.textContent = translations[lang][key];
             }
         }
     });
-
-    document.querySelectorAll('.like-button').forEach(button => {
-        const isLiked = button.classList.contains('liked');
-        const likeTextSpan = button.querySelector('span[data-lang-key="like"], span[data-lang-key="liked"]');
-        if (likeTextSpan) {
-            likeTextSpan.textContent = isLiked ? translations[currentLang]['liked'] : translations[currentLang]['like'];
-        }
-    });
-
-    document.querySelectorAll('.comment-input').forEach(input => {
-        input.placeholder = translations[lang]['writeAComment'];
-    });
-
-    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-    if (imagePreviewContainer && imagePreviewContainer.children.length === 0) {
-        imagePreviewContainer.textContent = translations[lang]['hereWillBePhotos'];
-        imagePreviewContainer.style.justifyContent = 'center';
-        imagePreviewContainer.style.alignItems = 'center';
+    if (imagePreviewContainer && translations[currentLang] && translations[currentLang]['hereWillBePhotos']) {
+         if (imageUpload && imageUpload.files.length === 0) {
+            imagePreviewContainer.textContent = translations[currentLang]['hereWillBePhotos'];
+            imagePreviewContainer.style.justifyContent = 'center';
+            imagePreviewContainer.style.alignItems = 'center';
+         }
     }
+    updatePostTimes();
+}
 
+function updatePostTimes() {
+    moment.locale(currentLang);
     document.querySelectorAll('.comment-time, .post-time').forEach(timeSpan => {
         const timestamp = timeSpan.getAttribute('data-timestamp');
         if (timestamp) {
             timeSpan.textContent = moment(parseInt(timestamp)).fromNow();
         }
     });
-
-    document.querySelectorAll('.feed-post').forEach(post => {
-        const postId = post.getAttribute('data-post-id');
-        const myProfileName = translations[currentLang]['myProfileName'];
-
-        const postOptionsToggle = post.querySelector('.post-options-toggle');
-        if (postOptionsToggle) {
-            if (postId && postId.startsWith('post-')) {
-                postOptionsToggle.style.display = 'block';
-            } else {
-                postOptionsToggle.style.display = 'none';
-            }
-        }
-
-        post.querySelectorAll('.comment-item').forEach(commentItem => {
-            const commentAuthorId = commentItem.getAttribute('data-author-id');
-            const commentOptionsToggle = commentItem.querySelector('.comment-options-toggle');
-            if (commentOptionsToggle) {
-                 commentOptionsToggle.style.display = (commentAuthorId === myProfileName) ? 'block' : 'none';
-            }
-        });
-    });
 }
 
-document.getElementById('language-switcher').value = currentLang;
-applyTranslations(currentLang);
-
-document.getElementById('language-switcher').addEventListener('change', (event) => {
-    currentLang = event.target.value;
-    localStorage.setItem('facebookLang', currentLang);
-    applyTranslations(currentLang);
-    loadAndRenderPosts();
-});
-
-function initLikeButton(button) {
-    if (button.dataset.listenerInitialized === 'true') {
-        return;
-    }
-    button.dataset.listenerInitialized = 'true';
-
-    button.addEventListener('click', () => {
-        let currentLikes = parseInt(button.getAttribute('data-likes')) || 0;
-        const likeTextSpan = button.querySelector('span[data-lang-key="like"], span[data-lang-key="liked"]');
-        const likeCountSpan = button.querySelector('.like-count');
-
-        if (button.classList.contains('liked')) {
-            button.classList.remove('liked');
-            currentLikes--;
-            if (likeTextSpan) likeTextSpan.textContent = translations[currentLang]['like'];
-        } else {
-            button.classList.add('liked');
-            currentLikes++;
-            if (likeTextSpan) likeTextSpan.textContent = translations[currentLang]['liked'];
-        }
-        button.setAttribute('data-likes', currentLikes);
-        if (likeCountSpan) {
-            likeCountSpan.textContent = currentLikes;
-        }
-        saveAllPostsData();
-    });
+function generateUniqueId() {
+    return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
 }
 
-const imageUploadInput = document.getElementById('imageUpload');
-const imagePreviewContainer = document.getElementById('imagePreviewContainer');
-let selectedFilesData = [];
-
-imageUploadInput.addEventListener('change', (event) => {
-    imagePreviewContainer.innerHTML = '';
-    selectedFilesData = [];
-    const files = event.target.files;
-
-    if (files.length > 0) {
-        imagePreviewContainer.textContent = '';
-        imagePreviewContainer.style.justifyContent = 'flex-start';
-        imagePreviewContainer.style.alignItems = 'flex-start';
-
-        Array.from(files).forEach(file => {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const dataUrl = e.target.result;
-                selectedFilesData.push({ type: file.type, src: dataUrl });
-
-                let mediaElement;
-                if (file.type.startsWith('image/')) {
-                    mediaElement = document.createElement('img');
-                    mediaElement.src = dataUrl;
-                    mediaElement.alt = "Post Image";
-                } else if (file.type.startsWith('video/')) {
-                    mediaElement = document.createElement('video');
-                    mediaElement.src = dataUrl;
-                    mediaElement.controls = true;
-                    mediaElement.preload = "metadata";
-                }
-                if (mediaElement) {
-                    imagePreviewContainer.appendChild(mediaElement);
-                }
-            };
-            reader.readAsDataURL(file);
-        });
-    } else {
-        imagePreviewContainer.innerHTML = '';
-        imagePreviewContainer.style.justifyContent = 'center';
-        imagePreviewContainer.style.alignItems = 'center';
-        imagePreviewContainer.textContent = translations[currentLang]['hereWillBePhotos'];
+function renderComment(comment, postId) {
+    const commentElement = document.createElement('div');
+    commentElement.classList.add('comment-item');
+    if (comment.parentId) {
+        commentElement.classList.add('nested');
     }
-});
+    
+    commentElement.setAttribute('data-comment-id', comment.id);
+    commentElement.setAttribute('data-author-id', comment.author);
 
-document.getElementById('publishPostButton').addEventListener('click', () => {
-    const postTextInput = document.getElementById('postInput');
-    const postText = postTextInput.value.trim();
-
-    if (postText === '' && selectedFilesData.length === 0) {
-        alert('Пожалуйста, введите текст или выберите изображение/видео для поста.');
-        return;
-    }
-
-    const feedContainer = document.querySelector('.feed-container');
-    const newPost = document.createElement('div');
-    newPost.classList.add('feed-post');
-    const postId = 'post-' + Date.now();
-    newPost.setAttribute('data-post-id', postId);
-
-    const currentTime = Date.now();
-    const myProfileName = translations[currentLang]['myProfileName'];
-
-    let mediaHtml = '';
-    if (selectedFilesData.length > 0) {
-        mediaHtml = `<div class="post-images ${selectedFilesData.length === 1 ? 'single-image' : ''}">`;
-        selectedFilesData.forEach(mediaItem => {
-            if (mediaItem.type.startsWith('image/')) {
-                mediaHtml += `<img src="${mediaItem.src}" alt="Post Image">`;
-            } else if (mediaItem.type.startsWith('video/')) {
-                mediaHtml += `<video controls preload="metadata" width="100%" height="auto"><source src="${mediaItem.src}" type="${mediaItem.type}"></video>`;
-            }
-        });
-        mediaHtml += '</div>';
-    }
-
-    newPost.innerHTML = `
-        <div class="post-author-info">
-            <div class="avatar-icon-placeholder"><i class="fas fa-user"></i></div>
-            <div>
-                <span class="author-name" data-lang-key="myProfileName">${myProfileName}</span>
-                <span class="post-time" data-timestamp="${currentTime}">${moment(currentTime).fromNow()}</span>
-            </div>
-            <div class="post-options">
-                <i class="fas fa-ellipsis-h post-options-toggle" style="display: block;"></i>
-                <div class="post-options-menu">
-                    <button class="delete-post-btn" data-lang-key="deletePost">${translations[currentLang]['deletePost']}</button>
-                    <button class="cancel-btn" data-lang-key="cancel">${translations[currentLang]['cancel']}</button>
-                </div>
-            </div>
-        </div>
-        ${postText ? `<p class="post-text">${postText}</p>` : ''}
-        ${mediaHtml}
-        <div class="post-actions">
-            <span class="like-button" data-likes="0"><i class="fas fa-thumbs-up"></i> <span data-lang-key="like">${translations[currentLang]['like']}</span> <span class="like-count">0</span></span>
-            <span class="comment-button">
-                <i class="fas fa-comment"></i>
-                <span data-lang-key="comment">${translations[currentLang]['comment']}</span>
-                <span class="comment-count">0</span>
-            </span>
-            <span class="share-button"><i class="fas fa-share"></i> <span data-lang-key="share">${translations[currentLang]['share']}</span></span>
-        </div>
-        <div class="comments-section" style="display: none;">
-            <div class="comment-input-area">
-                <div class="avatar-icon-placeholder-sm"><i class="fas fa-user"></i></div>
-                <input type="text" class="comment-input" placeholder="${translations[currentLang]['writeAComment']}" data-lang-key="writeAComment">
-            </div>
-            <div class="comments-list">
+    const deleteButton = comment.author === 'Gevorg Shahinyan' 
+        ? `<button class="delete-comment-btn" data-action="delete-comment">${translations[currentLang]['deleteComment']}</button>` 
+        : '';
+        
+    commentElement.innerHTML = `
+        <div class="avatar-icon-placeholder-sm"><i class="fas fa-user"></i></div>
+        <div class="comment-content">
+            <span class="comment-author">${comment.author}</span>
+            <p class="comment-text">${comment.text}</p>
+            <div class="comment-meta">
+                <span class="comment-time" data-timestamp="${comment.timestamp}"></span>
+                ${deleteButton}
             </div>
         </div>
     `;
 
-    const createPostElement = document.querySelector('.create-post');
-    feedContainer.insertBefore(newPost, createPostElement.nextSibling);
+    return commentElement;
+}
 
-    postTextInput.value = '';
+
+function renderPost(post) {
+    const postElement = document.createElement('div');
+    postElement.classList.add('feed-post'); 
+    postElement.setAttribute('data-post-id', post.id);
+
+    const deletePostButton = post.author === 'Gevorg Shahinyan' 
+        ? `<i class="fas fa-ellipsis-h post-options-icon" data-action="delete-post"></i>` 
+        : '';
+
+    postElement.innerHTML = `
+        <div class="post-author-info">
+            <div class="avatar-icon-placeholder"><i class="fas fa-user"></i></div>
+            <div>
+                <span class="author-name">${post.author}</span>
+                <span class="post-time" data-timestamp="${post.timestamp}"></span>
+            </div>
+            ${deletePostButton}
+        </div>
+        <p class="post-text">${post.text}</p>
+        <div class="post-images ${post.images && post.images.length === 1 ? 'single-image' : ''}">
+            ${(post.images || []).map(src => {
+                const isVideo = src.startsWith('data:video');
+                if (isVideo) {
+                    return `<video controls preload="metadata" width="100%" height="auto"><source src="${src}" type="video/mp4">Ваш браузер не поддерживает тег video.</video>`;
+                }
+                return `<img src="${src}" alt="Post Image">`;
+            }).join('')}
+        </div>
+        <div class="post-actions">
+            <span class="like-button" data-likes="${post.likes}" data-action="like">
+                <i class="fas fa-thumbs-up" style="color: ${post.isLiked ? '#1877f2' : ''};"></i> 
+                <span data-lang-key="${post.isLiked ? 'liked' : 'like'}">${translations[currentLang][post.isLiked ? 'liked' : 'like']}</span> 
+                <span class="like-count">${post.likes}</span>
+            </span>
+            <span class="comment-button">
+                <i class="fas fa-comment"></i>
+                <span data-lang-key="comment">${translations[currentLang]['comment']}</span>
+                <span class="comment-count">${post.comments.length}</span>
+            </span>
+            <span class="share-button"><i class="fas fa-share"></i> <span data-lang-key="share">${translations[currentLang]['share']}</span></span>
+        </div>
+        <div class="comments-section">
+            <div class="comment-input-area">
+                <div class="avatar-icon-placeholder-sm"><i class="fas fa-user"></i></div>
+                <input type="text" class="comment-input" placeholder="${translations[currentLang]['writeAComment']}">
+            </div>
+            <div class="comments-list">
+                </div>
+        </div>
+    `;
+
+    const commentsList = postElement.querySelector('.comments-list');
+    post.comments.forEach(comment => {
+        commentsList.appendChild(renderComment(comment, post.id));
+    });
+
+    return postElement;
+}
+
+
+async function loadAndRenderPosts() {
+    posts = await loadPostsFromDB();
+    
+    if (postsContainer) {
+        postsContainer.innerHTML = '';
+        posts.sort((a, b) => b.timestamp - a.timestamp).forEach(post => {
+            postsContainer.appendChild(renderPost(post));
+        });
+        updatePostTimes();
+    }
+}
+
+
+function displayImagePreview(files) {
+    if (!imagePreviewContainer || files.length === 0) return;
+
+    imagePreviewContainer.style.justifyContent = 'flex-start';
+    imagePreviewContainer.style.alignItems = 'flex-start';
     imagePreviewContainer.innerHTML = '';
+    
+    if (files.length === 1) {
+        imagePreviewContainer.textContent = `Выбран файл: ${files[0].name}`;
+    } else {
+        imagePreviewContainer.textContent = `Выбрано файлов: ${files.length}`;
+    }
+}
+
+async function handlePostCreation() {
+    if (!postInput || !imageUpload) return; 
+
+    const text = postInput.value.trim();
+    const files = Array.from(imageUpload.files);
+    
+    if (!text && files.length === 0) {
+        return;
+    }
+
+    const imagePromises = files.map(file => {
+        return new Promise(resolve => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsDataURL(file); 
+        });
+    });
+
+    const imageUrls = await Promise.all(imagePromises);
+
+    const newPost = {
+        id: generateUniqueId(),
+        author: 'Gevorg Shahinyan',
+        text: text,
+        images: imageUrls, 
+        timestamp: Date.now(),
+        likes: 0,
+        isLiked: false,
+        comments: [],
+        audience: 'public'
+    };
+
+    await savePostToDB(newPost);
+    
+    postInput.value = '';
+    imageUpload.value = '';
+    imagePreviewContainer.innerHTML = '';
+    imagePreviewContainer.textContent = translations[currentLang]['hereWillBePhotos'];
     imagePreviewContainer.style.justifyContent = 'center';
     imagePreviewContainer.style.alignItems = 'center';
-    imagePreviewContainer.textContent = translations[currentLang]['hereWillBePhotos'];
-    selectedFilesData = [];
-    imageUploadInput.value = '';
 
-    initEventListenersForPost(newPost);
-    saveAllPostsData();
-    applyTranslations(currentLang);
-});
-
-function initCommentInput(inputElement) {
-    if (inputElement.dataset.listenerInitialized === 'true') {
-        return;
-    }
-    inputElement.dataset.listenerInitialized = 'true';
-
-    inputElement.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter' && this.value.trim() !== '') {
-            const commentText = this.value.trim();
-            const commentsList = this.closest('.comments-section').querySelector('.comments-list');
-            const postId = this.closest('.feed-post').getAttribute('data-post-id');
-
-            const commentId = 'comment-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
-            const timestamp = Date.now();
-            const myProfileName = translations[currentLang]['myProfileName'];
-
-            const newComment = document.createElement('div');
-            newComment.classList.add('comment-item');
-            newComment.setAttribute('data-comment-id', commentId);
-            newComment.setAttribute('data-author-id', myProfileName);
-
-            newComment.innerHTML = `
-                <div class="avatar-icon-placeholder-sm"><i class="fas fa-user"></i></div>
-                <div class="comment-content">
-                    <span class="comment-author">${myProfileName}</span>
-                    <p class="comment-text">${commentText}</p>
-                    <div class="comment-meta">
-                        <span class="comment-time" data-timestamp="${timestamp}">${moment(timestamp).fromNow()}</span>
-                        <div class="comment-options">
-                            <i class="fas fa-ellipsis-h comment-options-toggle" style="display: block;"></i>
-                            <div class="comment-options-menu">
-                                <button class="delete-comment-btn" data-lang-key="deleteComment">${translations[currentLang]['deleteComment']}</button>
-                                <button class="cancel-btn" data-lang-key="cancel">${translations[currentLang]['cancel']}</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            commentsList.appendChild(newComment);
-
-            this.value = '';
-            updateCommentCount(this.closest('.feed-post'));
-            initCommentOptionsMenu(newComment);
-            saveAllPostsData();
-            applyTranslations(currentLang);
-        }
-    });
+    loadAndRenderPosts();
 }
 
-function initCommentToggle(commentButton) {
-    if (commentButton.dataset.listenerInitialized === 'true') {
-        return;
-    }
-    commentButton.dataset.listenerInitialized = 'true';
 
-    commentButton.addEventListener('click', () => {
-        const commentsSection = commentButton.closest('.feed-post').querySelector('.comments-section');
-        if (commentsSection) {
-            commentsSection.style.display = (commentsSection.style.display === 'none' || commentsSection.style.display === '') ? 'block' : 'none';
-        }
-    });
-}
 
-function updateCommentCount(postElement) {
-    const commentsList = postElement.querySelector('.comments-list');
-    const commentCountSpan = postElement.querySelector('.comment-count');
-    if (commentsList && commentCountSpan) {
-        commentCountSpan.textContent = commentsList.children.length;
-    }
-}
-
-function initPostOptionsMenu(postElement) {
-    const toggleButton = postElement.querySelector('.post-options-toggle');
-    const menu = postElement.querySelector('.post-options-menu');
-    const deleteButton = postElement.querySelector('.delete-post-btn');
-    const cancelButton = postElement.querySelector('.cancel-btn');
-
-    if (!toggleButton || !menu || toggleButton.dataset.listenerInitialized === 'true') {
-        return;
-    }
-    toggleButton.dataset.listenerInitialized = 'true';
-
-    toggleButton.addEventListener('click', (event) => {
-        event.stopPropagation();
-        document.querySelectorAll('.post-options-menu, .comment-options-menu').forEach(openMenu => {
-            if (openMenu !== menu) {
-                openMenu.style.display = 'none';
-            }
-        });
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    });
-
-    if (deleteButton) {
-        if (deleteButton.dataset.listenerInitialized === 'true') {
-            return;
-        }
-        deleteButton.dataset.listenerInitialized = 'true';
-        deleteButton.addEventListener('click', () => {
-            const postId = postElement.getAttribute('data-post-id');
-            postElement.remove();
-            deletePostData(postId);
-            menu.style.display = 'none';
-        });
-    }
-
-    if (cancelButton) {
-        if (cancelButton.dataset.listenerInitialized === 'true') {
-            return;
-        }
-        cancelButton.dataset.listenerInitialized = 'true';
-        cancelButton.addEventListener('click', () => {
-            menu.style.display = 'none';
-        });
-    }
-
-    document.addEventListener('click', (event) => {
-        if (menu.style.display === 'block' && !menu.contains(event.target) && !toggleButton.contains(event.target)) {
-            menu.style.display = 'none';
-        }
-    });
-
-    const postId = postElement.getAttribute('data-post-id');
-    if (toggleButton) {
-        toggleButton.style.display = (postId && postId.startsWith('post-')) ? 'block' : 'none';
-    }
-}
-
-function deletePostData(postId) {
-    let allPostsData = JSON.parse(localStorage.getItem('allPostsData') || '[]');
-    allPostsData = allPostsData.filter(post => post.postId !== postId);
-    localStorage.setItem('allPostsData', JSON.stringify(allPostsData));
-    console.log('Post deleted from localStorage. Remaining posts:', allPostsData);
-}
-
-function initCommentOptionsMenu(commentItem) {
-    const toggleButton = commentItem.querySelector('.comment-options-toggle');
-    const menu = commentItem.querySelector('.comment-options-menu');
-    const deleteButton = commentItem.querySelector('.delete-comment-btn');
-    const cancelButton = commentItem.querySelector('.cancel-btn');
-    const commentAuthorId = commentItem.getAttribute('data-author-id');
-    const myProfileName = translations[currentLang]['myProfileName'];
-
-    if (!toggleButton || !menu || toggleButton.dataset.listenerInitialized === 'true') {
-        return;
-    }
-    toggleButton.dataset.listenerInitialized = 'true';
-
-    toggleButton.style.display = (commentAuthorId === myProfileName) ? 'block' : 'none';
-
-    toggleButton.addEventListener('click', (event) => {
-        event.stopPropagation();
-        document.querySelectorAll('.post-options-menu, .comment-options-menu').forEach(openMenu => {
-            if (openMenu !== menu) {
-                openMenu.style.display = 'none';
-            }
-        });
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    });
-
-    if (deleteButton) {
-        if (deleteButton.dataset.listenerInitialized === 'true') {
-            return;
-        }
-        deleteButton.dataset.listenerInitialized = 'true';
-        deleteButton.addEventListener('click', () => {
-            const postId = commentItem.closest('.feed-post').getAttribute('data-post-id');
-            const commentId = commentItem.getAttribute('data-comment-id');
-            commentItem.remove();
-            deleteCommentData(postId, commentId);
-            updateCommentCount(document.querySelector(`.feed-post[data-post-id="${postId}"]`));
-            menu.style.display = 'none';
-        });
-    }
-
-    if (cancelButton) {
-        if (cancelButton.dataset.listenerInitialized === 'true') {
-            return;
-        }
-        cancelButton.dataset.listenerInitialized = 'true';
-        cancelButton.addEventListener('click', () => {
-            menu.style.display = 'none';
-        });
-    }
-
-    document.addEventListener('click', (event) => {
-        if (menu.style.display === 'block' && !menu.contains(event.target) && !toggleButton.contains(event.target)) {
-            menu.style.display = 'none';
-        }
-    });
-}
-
-function deleteCommentData(postId, commentId) {
-    let allPostsData = JSON.parse(localStorage.getItem('allPostsData') || '[]');
-    const postIndex = allPostsData.findIndex(post => post.postId === postId);
-
+async function handleLike(postId) {
+    const postIndex = posts.findIndex(p => p.id === postId);
     if (postIndex !== -1) {
-        allPostsData[postIndex].comments = allPostsData[postIndex].comments.filter(comment => comment.commentId !== commentId);
-        localStorage.setItem('allPostsData', JSON.stringify(allPostsData));
-        console.log(`Comment ${commentId} deleted from post ${postId}. Remaining comments:`, allPostsData[postIndex].comments);
+        const post = posts[postIndex];
+        post.isLiked = !post.isLiked;
+        post.likes += post.isLiked ? 1 : -1;
+        
+        await savePostToDB(post);
+        loadAndRenderPosts();
     }
 }
 
+async function handleComment(postId, commentText) {
+    const postIndex = posts.findIndex(p => p.id === postId);
+    if (postIndex !== -1 && commentText) {
+        const newComment = {
+            id: generateUniqueId(),
+            author: 'User', 
+            text: commentText,
+            timestamp: Date.now(),
+            parentId: null
+        };
+        posts[postIndex].comments.push(newComment);
 
-function initEventListenersForPost(post) {
-    const likeButton = post.querySelector('.like-button');
-    if (likeButton) {
-        initLikeButton(likeButton);
-    }
-
-    const commentToggleButton = post.querySelector('.comment-button');
-    if (commentToggleButton) {
-        initCommentToggle(commentToggleButton);
-    }
-
-    const commentInput = post.querySelector('.comment-input');
-    if (commentInput) {
-        initCommentInput(commentInput);
-    }
-
-    updateCommentCount(post);
-
-    initPostOptionsMenu(post);
-
-    post.querySelectorAll('.comment-item').forEach(commentItem => {
-        initCommentOptionsMenu(commentItem);
-    });
-
-    const commentsSection = post.querySelector('.comments-section');
-    if (commentsSection) {
-        commentsSection.style.display = 'none';
+        await savePostToDB(posts[postIndex]);
+        loadAndRenderPosts();
     }
 }
 
+async function handleDeletePost(postId) {
+    if (!confirm(translations[currentLang]['confirmDeletePost'])) return; 
 
-function saveAllPostsData() {
-    const allPostsData = [];
-    document.querySelectorAll('.feed-post').forEach(postElement => {
-        if (postElement.classList.contains('create-post') || (postElement.getAttribute('data-post-id') && postElement.getAttribute('data-post-id').startsWith('static-post-'))) {
-            return;
-        }
+    try {
+        const dbInstance = await openDB();
+        return new Promise((resolve, reject) => {
+            const transaction = dbInstance.transaction(STORE_NAME, 'readwrite');
+            const store = transaction.objectStore(STORE_NAME);
+            const request = store.delete(postId); 
 
-        const postId = postElement.getAttribute('data-post-id');
-        if (!postId) {
-             console.warn('Skipping post without data-post-id for saving:', postElement);
-             return;
-        }
-
-        const postTextElement = postElement.querySelector('.post-text');
-        const postText = postTextElement ? postTextElement.textContent.trim() : '';
-
-        const postTimeElement = postElement.querySelector('.post-time');
-        const postTimeTimestamp = postTimeElement ? parseInt(postTimeElement.getAttribute('data-timestamp')) : Date.now();
-        const postTimeDisplay = postTimeElement ? postTimeElement.textContent : moment(postTimeTimestamp).fromNow();
-
-        const postMedia = [];
-        postElement.querySelectorAll('.post-images img, .post-images video source').forEach(mediaEl => {
-            if (mediaEl.tagName === 'IMG') {
-                postMedia.push({ type: 'image/' + mediaEl.src.split('.').pop().toLowerCase(), src: mediaEl.src });
-            } else if (mediaEl.tagName === 'SOURCE') {
-                postMedia.push({ type: mediaEl.type, src: mediaEl.src });
-            }
+            request.onsuccess = () => {
+                posts = posts.filter(p => p.id !== postId); 
+                loadAndRenderPosts(); 
+                resolve();
+            };
+            request.onerror = (event) => reject(event.target.error);
         });
-
-        const comments = [];
-        postElement.querySelectorAll('.comments-list .comment-item').forEach(commentItem => {
-            const commentAuthorElement = commentItem.querySelector('.comment-author');
-            const commentTextElement = commentItem.querySelector('.comment-text');
-            const commentTimeElement = commentItem.querySelector('.comment-time');
-
-            const commentId = commentItem.getAttribute('data-comment-id');
-            const authorId = commentItem.getAttribute('data-author-id');
-            const commentTimestamp = commentTimeElement ? parseInt(commentTimeElement.getAttribute('data-timestamp')) : Date.now();
-
-
-            comments.push({
-                author: commentAuthorElement ? commentAuthorElement.textContent.trim() : '',
-                text: commentTextElement ? commentTextElement.textContent.trim() : '',
-                timestamp: commentTimestamp,
-                authorId: authorId,
-                commentId: commentId
-            });
-        });
-
-        const likeButton = postElement.querySelector('.like-button');
-        const likes = likeButton ? (parseInt(likeButton.getAttribute('data-likes')) || 0) : 0;
-        const isLiked = likeButton ? likeButton.classList.contains('liked') : false;
-
-        allPostsData.push({
-            postId,
-            postText,
-            postTime: postTimeDisplay,
-            postTimeTimestamp,
-            postMedia,
-            comments,
-            likes,
-            isLiked
-        });
-    });
-    localStorage.setItem('allPostsData', JSON.stringify(allPostsData));
-    console.log('Posts data saved to localStorage:', allPostsData);
+    } catch (error) {
+        console.error("Ошибка удаления поста из IndexedDB:", error);
+    }
 }
 
+async function handleDeleteComment(postId, commentId) {
+    if (!confirm(translations[currentLang]['confirmDeleteComment'])) return;
 
-function loadAndRenderPosts() {
-    const savedData = localStorage.getItem('allPostsData');
-    const feedContainer = document.querySelector('.feed-container');
-    const createPostElement = document.querySelector('.create-post');
+    const postIndex = posts.findIndex(p => p.id === postId);
+    if (postIndex !== -1) {
+        const post = posts[postIndex];
+        post.comments = post.comments.filter(c => c.id !== commentId);
 
-    Array.from(document.querySelectorAll('.feed-post')).forEach(post => {
-        if (!post.classList.contains('create-post') && !post.getAttribute('data-post-id').startsWith('static-post-')) {
-            post.remove();
-        }
-    });
-
-    let dynamicPostsToRender = [];
-    if (savedData) {
-        dynamicPostsToRender = JSON.parse(savedData);
-        console.log('Loaded posts data from localStorage:', dynamicPostsToRender);
-
-        dynamicPostsToRender = dynamicPostsToRender.filter(post => !post.postId.startsWith('static-post-'));
-
-        dynamicPostsToRender.sort((a, b) => {
-            const timeA = a.postTimeTimestamp || 0;
-            const timeB = b.postTimeTimestamp || 0;
-            return timeB - timeA;
-        });
+        await savePostToDB(post);
+        loadAndRenderPosts();
     }
-
-    const myProfileName = translations[currentLang]['myProfileName'];
-
-    dynamicPostsToRender.forEach(postData => {
-        if (document.querySelector(`.feed-post[data-post-id="${postData.postId}"]`)) {
-            return;
-        }
-
-        const newPost = document.createElement('div');
-        newPost.classList.add('feed-post');
-        newPost.setAttribute('data-post-id', postData.postId);
-
-        let mediaHtml = '';
-        if (postData.postMedia && postData.postMedia.length > 0) {
-            mediaHtml = `<div class="post-images ${postData.postMedia.length === 1 ? 'single-image' : ''}">`;
-            postData.postMedia.forEach(mediaItem => {
-                const mimeTypeMatch = mediaItem.src.match(/^data:([^;]+);/);
-                const inferredMimeType = mimeTypeMatch ? mimeTypeMatch[1] : mediaItem.type;
-
-                if (inferredMimeType && inferredMimeType.startsWith('image/')) {
-                    mediaHtml += `<img src="${mediaItem.src}" alt="Post Image">`;
-                } else if (inferredMimeType && inferredMimeType.startsWith('video/')) {
-                    mediaHtml += `<video controls preload="metadata" width="100%" height="auto"><source src="${mediaItem.src}" type="${inferredMimeType}"></video>`;
-                } else {
-                    if (mediaItem.src && (mediaItem.src.match(/^data:image\//i) || /\.(jpeg|jpg|gif|png)$/i.test(mediaItem.src))) {
-                        mediaHtml += `<img src="${mediaItem.src}" alt="Post Image">`;
-                    } else if (mediaItem.src && (mediaItem.src.match(/^data:video\//i) || /\.(mp4|webm|ogg)$/i.test(mediaItem.src))) {
-                        const fileExtension = mediaItem.src.split('.').pop().toLowerCase();
-                        let fallbackMimeType = 'video/mp4';
-                        if (fileExtension === 'webm') fallbackMimeType = 'video/webm';
-                        if (fileExtension === 'ogg') fallbackMimeType = 'video/ogg';
-                        mediaHtml += `<video controls preload="metadata" width="100%" height="auto"><source src="${mediaItem.src}" type="${fallbackMimeType}"></video>`;
-                    }
-                }
-            });
-            mediaHtml += '</div>';
-        }
-
-        const commentCount = postData.comments ? postData.comments.length : 0;
-        const likeTextKey = postData.isLiked ? 'liked' : 'like';
-
-        const showPostOptionsToggle = postData.postId.startsWith('post-') ? 'block' : 'none';
-
-        newPost.innerHTML = `
-            <div class="post-author-info">
-                <div class="avatar-icon-placeholder"><i class="fas fa-user"></i></div>
-                <div>
-                    <span class="author-name" data-lang-key="myProfileName">${myProfileName}</span>
-                    <span class="post-time" data-timestamp="${postData.postTimeTimestamp || ''}">${moment(postData.postTimeTimestamp || Date.now()).fromNow()}</span>
-                </div>
-                <div class="post-options">
-                    <i class="fas fa-ellipsis-h post-options-toggle" style="display: ${showPostOptionsToggle};"></i>
-                    <div class="post-options-menu">
-                        <button class="delete-post-btn" data-lang-key="deletePost">${translations[currentLang]['deletePost']}</button>
-                        <button class="cancel-btn" data-lang-key="cancel">${translations[currentLang]['cancel']}</button>
-                    </div>
-                </div>
-            </div>
-            ${postData.postText ? `<p class="post-text">${postData.postText}</p>` : ''}
-            ${mediaHtml}
-            <div class="post-actions">
-                <span class="like-button ${postData.isLiked ? 'liked' : ''}" data-likes="${postData.likes || 0}"><i class="fas fa-thumbs-up"></i> <span data-lang-key="${likeTextKey}">${translations[currentLang][likeTextKey]}</span> <span class="like-count">${postData.likes || 0}</span></span>
-                <span class="comment-button">
-                    <i class="fas fa-comment"></i>
-                    <span data-lang-key="comment">${translations[currentLang]['comment']}</span>
-                    <span class="comment-count">${commentCount}</span>
-                </span>
-                <span class="share-button"><i class="fas fa-share"></i> <span data-lang-key="share">${translations[currentLang]['share']}</span></span>
-            </div>
-            <div class="comments-section" style="display: none;">
-                <div class="comment-input-area">
-                    <div class="avatar-icon-placeholder-sm"><i class="fas fa-user"></i></div>
-                    <input type="text" class="comment-input" placeholder="${translations[currentLang]['writeAComment']}" data-lang-key="writeAComment">
-                </div>
-                <div class="comments-list">
-                </div>
-            </div>
-        `;
-        feedContainer.insertBefore(newPost, createPostElement.nextSibling);
-
-        const commentsList = newPost.querySelector('.comments-list');
-        if (postData.comments && commentsList) {
-            postData.comments.forEach(comment => {
-                const commentItem = document.createElement('div');
-                commentItem.classList.add('comment-item');
-                commentItem.setAttribute('data-comment-id', comment.commentId || 'legacy-comment-' + Date.now());
-                commentItem.setAttribute('data-author-id', comment.authorId || comment.author || 'Unknown');
-
-                const showCommentOptionsToggle = ((comment.authorId || comment.author) === myProfileName) ? 'block' : 'none';
-
-                commentItem.innerHTML = `
-                    <div class="avatar-icon-placeholder-sm"><i class="fas fa-user"></i></div>
-                    <div class="comment-content">
-                        <span class="comment-author">${comment.author || 'Unknown'}</span>
-                        <p class="comment-text">${comment.text || ''}</p>
-                        <div class="comment-meta">
-                            <span class="comment-time" data-timestamp="${comment.timestamp || Date.now()}">${moment(comment.timestamp || Date.now()).fromNow()}</span>
-                            <div class="comment-options">
-                                <i class="fas fa-ellipsis-h comment-options-toggle" style="display: ${showCommentOptionsToggle};"></i>
-                                <div class="comment-options-menu">
-                                    <button class="delete-comment-btn" data-lang-key="deleteComment">${translations[currentLang]['deleteComment']}</button>
-                                    <button class="cancel-btn" data-lang-key="cancel">${translations[currentLang]['cancel']}</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                commentsList.appendChild(commentItem);
-            });
-        }
-    });
-
-    if (createPostElement && feedContainer.firstChild !== createPostElement) {
-        feedContainer.insertBefore(createPostElement, feedContainer.firstChild);
-    }
-
-    document.querySelectorAll('.feed-post').forEach(post => {
-        if (!post.classList.contains('create-post')) {
-            initEventListenersForPost(post);
-        }
-    });
-    applyTranslations(currentLang);
 }
 
 function initSearchFunctionality() {
-    const searchInput = document.querySelector('.search-box input[type="text"]');
-    if (!searchInput) {
-        console.warn('Search input not found.');
-        return;
-    }
+    const searchInput = document.querySelector('.search-box input');
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            document.querySelectorAll('.feed-post').forEach(post => { 
+                const postTextElement = post.querySelector('.post-text');
+                const postText = postTextElement ? postTextElement.textContent.toLowerCase() : '';
+                
+                let postMatches = postText.includes(query);
 
-    searchInput.addEventListener('input', () => {
-        const query = searchInput.value.toLowerCase().trim();
-        const allPosts = document.querySelectorAll('.feed-post');
-
-        allPosts.forEach(post => {
-            if (post.classList.contains('create-post')) {
-                return;
-            }
-
-            const postTextElement = post.querySelector('.post-text');
-            const postText = postTextElement ? postTextElement.textContent.toLowerCase() : '';
-            let postMatches = false;
-
-            if (postText.includes(query)) {
-                postMatches = true;
-            }
-
-            const commentsList = post.querySelector('.comments-list');
-            if (!postMatches && commentsList) {
-                const commentItems = commentsList.querySelectorAll('.comment-item');
-                for (const commentItem of commentItems) {
-                    const commentTextElement = commentItem.querySelector('.comment-text');
-                    const commentText = commentTextElement ? commentTextElement.textContent.toLowerCase() : '';
-                    if (commentText.includes(query)) {
-                        postMatches = true;
-                        break;
+                if (!postMatches) {
+                    const comments = post.querySelectorAll('.comment-text');
+                    for (const comment of comments) {
+                        if (comment.textContent.toLowerCase().includes(query)) {
+                            postMatches = true;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (query === '' || postMatches) {
-                post.style.display = 'block';
-            } else {
-                post.style.display = 'none';
-            }
+                post.style.display = query === '' || postMatches ? 'block' : 'none';
+            });
         });
-    });
+    }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    imagePreviewContainer.textContent = translations[currentLang]['hereWillBePhotos'];
-    imagePreviewContainer.style.justifyContent = 'center';
-    imagePreviewContainer.style.alignItems = 'center';
+
+document.addEventListener('DOMContentLoaded', async () => { 
+    
+    if (imagePreviewContainer) {
+        imagePreviewContainer.textContent = translations[currentLang]['hereWillBePhotos'];
+        imagePreviewContainer.style.justifyContent = 'center';
+        imagePreviewContainer.style.alignItems = 'center';
+
+        if (imageUpload) {
+            imageUpload.addEventListener('change', () => {
+                displayImagePreview(Array.from(imageUpload.files));
+            });
+        }
+    }
 
     const languageSwitcher = document.getElementById('language-switcher');
+    const publishButton = document.getElementById('publishButton'); 
+
+    applyTranslations(currentLang);
+
     if (languageSwitcher) {
         languageSwitcher.value = currentLang;
         languageSwitcher.addEventListener('change', (event) => {
@@ -891,15 +499,60 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    loadAndRenderPosts();
+    if (publishButton) {
+        publishButton.addEventListener('click', handlePostCreation); 
+    } 
+
+    await loadAndRenderPosts(); 
     initSearchFunctionality();
+
+    if (postsContainer) {
+        postsContainer.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && e.target.classList.contains('comment-input')) {
+                e.preventDefault();
+                const input = e.target;
+                const commentText = input.value.trim();
+                const postId = input.closest('.feed-post')?.getAttribute('data-post-id'); 
+                
+                if (commentText && postId) {
+                    handleComment(postId, commentText); 
+                    input.value = '';
+                }
+            }
+        });
+    }
+
+
+    if (postsContainer) {
+        postsContainer.addEventListener('click', (e) => {
+            const button = e.target.closest('[data-action]');
+            if (!button) return;
+
+            const action = button.getAttribute('data-action');
+            const postElement = button.closest('.feed-post'); 
+            const postId = postElement?.getAttribute('data-post-id');
+            const commentItem = button.closest('.comment-item');
+            const commentId = commentItem?.getAttribute('data-comment-id');
+            
+            if (!postId) return; 
+
+            if (action === 'like') {
+                handleLike(postId);
+            } else if (action === 'delete-post') {
+                if (posts.some(p => p.id === postId)) {
+                     handleDeletePost(postId);
+                } else {
+                     alert("Этот пост является статическим примером и не может быть удален.");
+                }
+            } else if (action === 'delete-comment') {
+                handleDeleteComment(postId, commentId);
+            }
+        });
+    }
+
 });
 
+
 setInterval(() => {
-    document.querySelectorAll('.comment-time, .post-time').forEach(timeSpan => {
-        const timestamp = timeSpan.getAttribute('data-timestamp');
-        if (timestamp) {
-            timeSpan.textContent = moment(parseInt(timestamp)).fromNow();
-        }
-    });
+    updatePostTimes();
 }, 60000);
